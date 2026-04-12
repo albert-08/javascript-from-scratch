@@ -1,3 +1,7 @@
+/**
+ * Lógica para crear pedidos y cobrar los pedidos del usuario
+ */
+
 import readline from 'node:readline'
 import { productos } from './productos.js'
 
@@ -10,6 +14,7 @@ const usuario = {
 let pedido = []
 let costoPedido = 0
 
+// Lista todos los productos del menú en un formato amigable
 const mostrarMenu = () => {
   console.log('\n-------------MENÚ---------------')
   console.log('CÓDIGO - NOMBRE PRODUCTO - COSTO')
@@ -52,17 +57,22 @@ const finalizarPedido = () => {
   return `${usuario.nombre}, debes pagar $${usuario.deuda}`
 }
 
+// Función que permite pagar todo un pedido y entrega cambio si es necesario.
 const pagarPedido = montoEntregado => {
-  if (montoEntregado < usuario.deuda) {
-    return `No te alcanza para pagar tu pedido`
-  } else if (montoEntregado === usuario.deuda) {
-    usuario.deuda = 0
-    return `Tu pedido ha sido pagado.`
+  if (typeof montoEntregado === "number") {
+    if (montoEntregado < usuario.deuda) {
+      return `No te alcanza para pagar tu pedido`
+    } else if (montoEntregado === usuario.deuda) {
+      usuario.deuda = 0
+      return `Tu pedido ha sido pagado.`
+    } else {
+      const cambio = montoEntregado - usuario.deuda
+      usuario.deuda = 0
+      return `Tu pedido ha sido pagado y tu cambio es de ${cambio}.`
+    }
   } else {
-    const cambio = montoEntregado - usuario.deuda
-    usuario.deuda = 0
-    return `Tu pedido ha sido pagado y tu cambio es de ${cambio}.`
-  }
+    return "Dato ingresado de forma erronea"
+  }  
 }
 
 const seleccionarProducto = () => {
